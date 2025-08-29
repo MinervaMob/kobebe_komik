@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kobebe Komik - Komik Bilangan Bulat</title>
+    <meta name="description" content="Baca komik edukatif tentang bilangan bulat secara gratis">
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1a472a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kobebe Komik">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon.png">
+    <link rel="apple-touch-icon" href="icons/icon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-book-open"></i>
+                    <h1>Kobebe Komik</h1>
+                </div>
+
+                <!-- Hamburger Menu Button (Mobile only) -->
+                <button class="hamburger-menu" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+
+                <nav class="nav" id="mainNav">
+                    <button class="nav-btn" id="homeBtn">
+                        <i class="fas fa-home"></i>
+                        <span>Beranda</span>
+                    </button>
+                    <button class="nav-btn" id="readerBtn">
+                        <i class="fas fa-book-reader"></i>
+                        <span>Baca</span>
+                    </button>
+                    <button class="nav-btn" id="downloadBtn">
+                        <i class="fas fa-download"></i>
+                        <span>Download</span>
+                    </button>
+                    <button class="nav-btn" id="aboutBtn">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Tentang</span>
+                    </button>
+                </nav>
+                <div class="header-actions">
+                    <button class="action-btn" id="fullscreenBtn" title="Layar Penuh">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <!-- <button class="action-btn" id="themeBtn" title="Ganti Tema">
+                        <i class="fas fa-moon"></i>
+                    </button> -->
+                    <!-- <button class="action-btn" id="installBtn" title="Install Aplikasi" style="display: none;">
+                        <i class="fas fa-download"></i>
+                    </button> -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Home Section -->
+        <section id="homeSection" class="section active">
+            <div class="container">
+                <div class="hero">
+                    <div class="hero-content">
+                        <h2 class="hero-title">Komik Bilangan Bulat</h2>
+                        <p class="hero-description">
+                            Belajar matematika menjadi lebih menyenangkan dengan komik edukatif tentang bilangan bulat.
+                            Nikmati pengalaman belajar yang interaktif dan mudah dipahami.
+                        </p>
+                        <div class="hero-actions">
+                            <button class="btn btn-primary" id="startReadingBtn">
+                                <i class="fas fa-play"></i>
+                                Mulai Baca
+                            </button>
+                            <button class="btn btn-secondary" id="downloadPdfBtn">
+                                <i class="fas fa-file-pdf"></i>
+                                Download PDF
+                            </button>
+                            <button class="btn btn-install" id="downloadAppBtn">
+                                <i class="fas fa-download"></i>
+                                Download Aplikasi
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hero-image">
+                        <img src="komik/image_komik/Cover.jpg" alt="Cover Komik Bilangan Bulat" class="cover-image">
+                    </div>
+                </div>
+
+                <div class="features">
+                    <h3>Fitur Unggulan</h3>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <i class="fas fa-mobile-alt"></i>
+                            <h4>Responsif</h4>
+                            <p>Dapat dibaca di semua perangkat</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-cloud-download-alt"></i>
+                            <h4>PWA</h4>
+                            <p>Install seperti aplikasi native</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-book-reader"></i>
+                            <h4>Mode Baca</h4>
+                            <p>Pengalaman baca yang nyaman</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                            <h4>Zoom</h4>
+                            <p>Perbesar gambar untuk detail</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reader Section -->
+        <section id="readerSection" class="section">
+            <div class="reader-container">
+                <div class="reader-header">
+                    <h2>Komik Bilangan Bulat</h2>
+                    <div class="reader-tools">
+                        <button class="tool-btn" id="zoomOutBtn" title="Perkecil">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <span id="zoomLevel">100%</span>
+                        <button class="tool-btn" id="zoomInBtn" title="Perbesar">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button class="tool-btn" id="resetZoomBtn" title="Reset Zoom">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="comic-scroll-container" id="comicScrollContainer">
+                    <!-- All comic pages will be loaded here -->
+                </div>
+
+                <div class="scroll-indicator">
+                    <div class="scroll-progress" id="scrollProgress"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section id="downloadSection" class="section">
+            <div class="container">
+                <div class="download-content">
+                    <h2>Download Komik</h2>
+                    <p>Download komik dalam format PDF untuk dibaca offline</p>
+
+                    <div class="download-card">
+                        <div class="download-info">
+                            <img src="komik/image_komik/Cover.jpg" alt="Cover" class="download-cover">
+                            <div class="download-details">
+                                <h3>Komik Bilangan Bulat</h3>
+                                <p class="download-desc">Komik edukatif tentang bilangan bulat yang menyenangkan untuk dipelajari</p>
+                                <div class="download-meta">
+                                    <span><i class="fas fa-file-pdf"></i> Format: PDF</span>
+                                    <span><i class="fas fa-images"></i> Halaman: 11</span>
+                                    <span><i class="fas fa-language"></i> Bahasa: Indonesia</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary download-btn" id="downloadPdfBtnMain">
+                            <i class="fas fa-download"></i>
+                            Download PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="aboutSection" class="section">
+            <div class="container">
+                <div class="about-content">
+                    <h2>Tentang Kobebe Komik</h2>
+                    <div class="about-grid">
+                        <div class="about-text">
+                            <p>
+                                Kobebe Komik adalah platform web komik edukatif yang dirancang khusus untuk membuat
+                                pembelajaran matematika menjadi lebih menyenangkan dan mudah dipahami.
+                            </p>
+                            <p>
+                                Dengan pendekatan visual yang menarik, siswa dapat memahami konsep bilangan bulat
+                                melalui cerita dan karakter yang menghibur.
+                            </p>
+
+                            <div class="tech-stack">
+                                <h3>Teknologi yang Digunakan</h3>
+                                <div class="tech-list">
+                                    <span class="tech-item"><i class="fab fa-html5"></i> HTML5</span>
+                                    <span class="tech-item"><i class="fab fa-css3-alt"></i> CSS3</span>
+                                    <span class="tech-item"><i class="fab fa-js-square"></i> JavaScript</span>
+                                    <span class="tech-item"><i class="fas fa-mobile-alt"></i> PWA</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="about-features">
+                            <h3>Fitur Aplikasi</h3>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Progressive Web App (PWA)</li>
+                                <li><i class="fas fa-check"></i> Responsif untuk semua perangkat</li>
+                                <li><i class="fas fa-check"></i> Mode offline (setelah install)</li>
+                                <li><i class="fas fa-check"></i> Kontrol zoom dan navigasi</li>
+                                <li><i class="fas fa-check"></i> Download PDF</li>
+                                <!-- <li><i class="fas fa-check"></i> Mode gelap/terang</li> -->
+                                <li><i class="fas fa-check"></i> Thumbnail navigasi</li>
+                                <li><i class="fas fa-check"></i> Layar penuh</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <i class="fas fa-book-open loading-icon"></i>
+            <h3>Memuat Komik...</h3>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loadingProgress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <img id="modalImage" src="" alt="Gambar Komik">
+            <div class="modal-controls">
+                <button class="modal-btn" id="modalPrevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="modal-btn" id="modalNextBtn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install Prompt - Removed the unnecessary corner box -->
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

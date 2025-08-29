@@ -1,0 +1,29 @@
+{
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "html.format.indentInnerHtml": true,
+    "html.format.wrapLineLength": 120,
+    "css.validate": true,
+    "css.lint.unknownAtRules": "ignore",
+    "javascript.validate.enable": true,
+    "javascript.preferences.quoteStyle": "single",
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact"
+    },
+    "liveServer.settings.port": 8000,
+    "liveServer.settings.root": "/",
+    "liveServer.settings.CustomBrowser": "chrome",
+    "liveServer.settings.donotShowInfoMsg": true,
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#1a472a",
+        "activityBar.foreground": "#ffffff",
+        "statusBar.background": "#0f1419",
+        "statusBar.foreground": "#ffffff"
+    }
+}

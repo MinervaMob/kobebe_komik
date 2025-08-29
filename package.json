@@ -1,0 +1,79 @@
+{
+    "name": "kobebe-komik",
+    "version": "1.0.0",
+    "description": "Progressive Web App untuk komik edukatif tentang bilangan bulat",
+    "main": "index.html",
+    "scripts": {
+        "start": "python -m http.server 8000",
+        "dev": "python -m http.server 8000",
+        "serve": "python -m http.server 8000",
+        "build": "echo 'Static site - no build needed'",
+        "test": "echo 'No tests specified'",
+        "deploy:firebase": "firebase deploy",
+        "deploy:netlify": "netlify deploy --prod --dir .",
+        "pwa-check": "npx pwa-asset-generator"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yourusername/kobebe-komik.git"
+    },
+    "keywords": [
+        "pwa",
+        "komik",
+        "edukasi",
+        "bilangan-bulat",
+        "progressive-web-app",
+        "comic-reader",
+        "education",
+        "mathematics",
+        "html5",
+        "css3",
+        "javascript",
+        "service-worker",
+        "offline-first"
+    ],
+    "author": {
+        "name": "Developer Name",
+        "email": "developer@example.com",
+        "url": "https://github.com/yourusername"
+    },
+    "license": "MIT",
+    "homepage": "https://yourdomain.com",
+    "bugs": {
+        "url": "https://github.com/yourusername/kobebe-komik/issues"
+    },
+    "engines": {
+        "node": ">=12.0.0",
+        "npm": ">=6.0.0"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead",
+        "not ie <= 11"
+    ],
+    "devDependencies": {
+        "live-server": "^1.2.2",
+        "lighthouse": "^10.0.0",
+        "pwa-asset-generator": "^6.2.1"
+    },
+    "pwa": {
+        "name": "Kobebe Komik",
+        "short_name": "Kobebe",
+        "description": "Platform komik edukatif tentang bilangan bulat",
+        "theme_color": "#1a472a",
+        "background_color": "#0f1419",
+        "start_url": "/",
+        "display": "standalone",
+        "orientation": "portrait"
+    },
+    "webmanifest": {
+        "name": "Kobebe Komik",
+        "short_name": "Kobebe",
+        "theme_color": "#1a472a",
+        "background_color": "#0f1419",
+        "display": "standalone",
+        "scope": "/",
+        "start_url": "/"
+    }
+}

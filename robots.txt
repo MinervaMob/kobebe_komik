@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# PWA files
+Allow: /manifest.json
+Allow: /sw.js
+Allow: /icons/
+
+# Comic content
+Allow: /komik/image_komik/
+Disallow: /komik/Komik Bilangan Bulat.pdf
+
+# Sitemap
+Sitemap: https://yourdomain.com/sitemap.xml
