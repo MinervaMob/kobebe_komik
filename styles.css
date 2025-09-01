@@ -869,12 +869,27 @@ body {
         background: rgba(255, 255, 255, 0.2) !important;
         border: 2px solid rgba(255, 255, 255, 0.3) !important;
         border-radius: var(--radius-md);
+        /* Enhanced mobile touch properties */
+        -webkit-tap-highlight-color: rgba(26, 71, 42, 0.3);
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        cursor: pointer;
     }
 
-    .hamburger-menu:hover {
+    .hamburger-menu:hover,
+    .hamburger-menu:focus,
+    .hamburger-menu:active {
         background: rgba(255, 255, 255, 0.3) !important;
         border-color: var(--primary-color) !important;
-        transform: scale(1.1);
+        transform: scale(1.05);
+        outline: none;
+    }
+
+    /* Mobile touch feedback */
+    .hamburger-menu:active {
+        background: rgba(26, 71, 42, 0.4) !important;
+        transform: scale(0.95);
     }    /* Hide header actions on mobile except hamburger */
     .header-actions {
         display: none;

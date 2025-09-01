@@ -1206,41 +1206,99 @@ function setupTouchGestures() {
 function setupMobileMenu() {
     console.log('🍔 Setting up mobile menu...');
 
-    // Wait for DOM and try multiple times
-    let attempts = 0;
-    const maxAttempts = 5;
-
-    function tryInitMenu() {
-        attempts++;
-        console.log(`Attempt ${attempts}/${maxAttempts} to initialize hamburger menu`);
-
+    // Wait for DOM to be ready
+    function initHamburgerMenu() {
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const mainNav = document.getElementById('mainNav');
         const navOverlay = document.getElementById('navOverlay');
 
-        // Debug element existence
-        console.log('Elements check:', {
-            hamburger: hamburgerBtn ? '✅' : '❌',
-            nav: mainNav ? '✅' : '❌',
-            overlay: navOverlay ? '✅' : '❌'
+        console.log('Elements found:', {
+            hamburger: !!hamburgerBtn,
+            nav: !!mainNav,
+            overlay: !!navOverlay
         });
 
         if (!hamburgerBtn || !mainNav || !navOverlay) {
-            if (attempts < maxAttempts) {
-                console.log(`⏱️ Retrying in ${200 * attempts}ms...`);
-                setTimeout(tryInitMenu, 200 * attempts);
-            } else {
-                console.error('❌ Failed to find required elements after all attempts');
-            }
+            console.log('❌ Missing elements, retrying...');
+            setTimeout(initHamburgerMenu, 100);
             return;
         }
 
-        // Success! Setup event listeners
-        console.log('✅ All elements found, setting up event listeners...');
+        console.log('✅ Setting up hamburger menu...');
 
-        // Remove any existing event listeners by cloning
-        const newHamburgerBtn = hamburgerBtn.cloneNode(true);
-        hamburgerBtn.parentNode.replaceChild(newHamburgerBtn, hamburgerBtn);
+        // Simple and direct event handler
+        function toggleMenu() {
+            console.log('🎯 TOGGLE MENU TRIGGERED!');
+            const isOpen = mainNav.classList.contains('active');
+
+            if (isOpen) {
+                // Close menu
+                hamburgerBtn.classList.remove('active');
+                mainNav.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                console.log('📱 Menu CLOSED');
+            } else {
+                // Open menu
+                hamburgerBtn.classList.add('active');
+                mainNav.classList.add('active');
+                navOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                console.log('📱 Menu OPENED');
+            }
+        }
+
+        // Remove existing listeners and add new ones
+        hamburgerBtn.onclick = null;
+        hamburgerBtn.ontouchend = null;
+
+        // Multiple event types for better compatibility
+        hamburgerBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('👆 Click event');
+            toggleMenu();
+        });
+
+        hamburgerBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('👆 Touch event');
+            toggleMenu();
+        });
+
+        // Fallback for mobile
+        hamburgerBtn.addEventListener('touchstart', function(e) {
+            console.log('👆 Touch start');
+        });
+
+        // Close menu when clicking overlay
+        navOverlay.addEventListener('click', function() {
+            console.log('👆 Overlay clicked');
+            toggleMenu();
+        });
+
+        // Close menu when clicking nav items
+        const navBtns = mainNav.querySelectorAll('.nav-btn');
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('👆 Nav button clicked');
+                if (mainNav.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        console.log('✅ Hamburger menu setup complete!');
+    }
+
+    // Start initialization
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHamburgerMenu);
+    } else {
+        initHamburgerMenu();
+    }
+}
 
         // Main click handler
         newHamburgerBtn.addEventListener('click', function(e) {
@@ -1258,14 +1316,80 @@ function setupMobileMenu() {
             }
         });
 
-        // Touch support for mobile
+        // Touch support for mobile with enhanced handling
+        let touchStartTime = 0;
+        let touchStartY = 0;
+
+        newHamburgerBtn.addEventListener('touchstart', function(e) {
+            console.log('👆 Hamburger touch start');
+            touchStartTime = Date.now();
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
         newHamburgerBtn.addEventListener('touchend', function(e) {
             e.preventDefault();
-            console.log('👆 Hamburger touch end');
+            e.stopPropagation();
+
+            const touchDuration = Date.now() - touchStartTime;
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchDistance = Math.abs(touchEndY - touchStartY);
+
+            console.log('👆 Hamburger touch end - Duration:', touchDuration, 'Distance:', touchDistance);
+
+            // Only trigger if it was a quick tap with minimal movement (not a scroll)
+            if (touchDuration < 500 && touchDistance < 20) {
+                console.log('🎯 Valid touch - triggering menu toggle');
+
+                const isMenuOpen = mainNav.classList.contains('active');
+                console.log('Menu state:', isMenuOpen ? 'OPEN' : 'CLOSED');
+
+                if (isMenuOpen) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            } else {
+                console.log('❌ Invalid touch - ignored');
+            }
+        }, { passive: false });
+
+        // Additional mobile events
+        newHamburgerBtn.addEventListener('pointerdown', function(e) {
+            if (e.pointerType === 'touch') {
+                console.log('📱 Pointer touch on hamburger');
+                // Add visual feedback
+                newHamburgerBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    newHamburgerBtn.style.transform = '';
+                }, 100);
+            }
         });
 
         // Overlay click to close
         navOverlay.addEventListener('click', closeMenu);
+
+        // Additional mobile fallback - global touch handling
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.closest('.hamburger-menu') || e.target.closest('.hamburger-btn')) {
+                console.log('🎯 Global touch start on hamburger area');
+                e.target.closest('.hamburger-menu, .hamburger-btn').dataset.touched = 'true';
+            }
+        });
+
+        document.addEventListener('touchend', function(e) {
+            const hamburgerElement = e.target.closest('.hamburger-menu') || e.target.closest('.hamburger-btn');
+            if (hamburgerElement && hamburgerElement.dataset.touched === 'true') {
+                console.log('🎯 Global touch end on hamburger - forcing menu toggle');
+                hamburgerElement.dataset.touched = 'false';
+
+                const isMenuOpen = mainNav.classList.contains('active');
+                if (isMenuOpen) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            }
+        });
 
         // Nav button clicks close menu
         const navBtns = mainNav.querySelectorAll('.nav-btn');
@@ -1577,3 +1701,92 @@ window.addEventListener('resize', debounce(() => {
 }, 250));
 
 console.log('Kobebe Komik App initialized successfully!');
+
+// HAMBURGER MENU FIX - Direct approach
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait a bit for all other scripts to load
+    setTimeout(function() {
+        console.log('🔧 DIRECT HAMBURGER FIX STARTING...');
+
+        const hamburger = document.getElementById('hamburgerBtn');
+        const nav = document.getElementById('mainNav');
+        const overlay = document.getElementById('navOverlay');
+
+        if (!hamburger || !nav || !overlay) {
+            console.log('❌ Elements not found for hamburger fix');
+            return;
+        }
+
+        console.log('✅ All elements found, applying direct fix...');
+
+        // Remove all existing event listeners
+        hamburger.replaceWith(hamburger.cloneNode(true));
+        const newHamburger = document.getElementById('hamburgerBtn');
+
+        // Simple toggle function
+        function directToggle() {
+            console.log('🎯 DIRECT HAMBURGER TOGGLE!');
+            const isOpen = nav.classList.contains('active');
+
+            if (isOpen) {
+                newHamburger.classList.remove('active');
+                nav.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                console.log('📱 Menu CLOSED');
+            } else {
+                newHamburger.classList.add('active');
+                nav.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                console.log('📱 Menu OPENED');
+            }
+        }
+
+        // Add click events
+        newHamburger.onclick = directToggle;
+        newHamburger.ontouchend = function(e) {
+            e.preventDefault();
+            directToggle();
+        };
+
+        // Close when clicking overlay
+        overlay.onclick = directToggle;
+
+        // Close when clicking nav buttons
+        nav.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.onclick = function() {
+                if (nav.classList.contains('active')) {
+                    directToggle();
+                }
+            };
+        });
+
+        // Make globally available for testing
+        window.toggleMenu = directToggle;
+
+        console.log('🎉 DIRECT HAMBURGER FIX COMPLETE!');
+
+        // Show success indicator
+        const indicator = document.createElement('div');
+        indicator.style.cssText = `
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            background: #4CAF50;
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 9999;
+            font-family: Arial, sans-serif;
+        `;
+        indicator.textContent = '✅ Hamburger Fixed!';
+        document.body.appendChild(indicator);
+
+        setTimeout(() => {
+            indicator.remove();
+        }, 3000);
+
+    }, 500); // Wait 500ms for other scripts
+});
