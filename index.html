@@ -27,7 +27,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-            /* ULTIMATE RESPONSIVE FIX - No horizontal scroll */
+    <!-- ULTIMATE LOADING SCREEN KILLER -->
+    <style>
+        /* ULTIMATE RESPONSIVE FIX - No horizontal scroll */
         * {
             box-sizing: border-box !important;
         }
@@ -50,8 +52,6 @@
             display: block !important;
         }
 
-        /* ULTIMATE LOADING SCREEN KILLER */
-    <style>
         #loadingScreen,
         .loading-screen {
             display: none !important;
@@ -216,10 +216,8 @@
 
     <script>
         // LOADING SCREEN PERMANENTLY DISABLED
-        console.log('🚨 LOADING SCREEN PERMANENTLY DISABLED');
 
         // ULTIMATE HAMBURGER MENU FIX
-        console.log('🍔 ULTIMATE HAMBURGER FIX LOADING...');
 
         function ultimateHamburgerFix() {
             const hamburger = document.getElementById('hamburgerBtn');
@@ -254,7 +252,6 @@
                         overlay.classList.remove('active');
                     }
                     document.body.style.overflow = '';
-                    console.log('🖥️ DESKTOP MODE - Hamburger hidden, nav visible');
                 } else {
                     // MOBILE MODE - Show hamburger, setup mobile nav
                     if (hamburger) {
@@ -262,7 +259,6 @@
                         hamburger.style.visibility = 'visible';
                         hamburger.style.opacity = '1';
                     }
-                    console.log('📱 MOBILE MODE - Hamburger visible');
                 }
             }
 
@@ -277,8 +273,6 @@
                 return;
             }
 
-            console.log('🍔 Setting up ultimate hamburger...');
-
             // Remove all existing listeners
             const newHamburger = hamburger.cloneNode(true);
             hamburger.parentNode.replaceChild(newHamburger, hamburger);
@@ -288,7 +282,6 @@
             function toggleMenu(e) {
                 // Only work on mobile
                 if (isDesktop()) {
-                    console.log('🖥️ Desktop detected - ignoring hamburger click');
                     return;
                 }
 
@@ -297,7 +290,6 @@
                     e.stopPropagation();
                 }
 
-                console.log('🍔 MENU TOGGLE!');
                 isMenuOpen = !isMenuOpen;
 
                 if (isMenuOpen) {
@@ -306,7 +298,6 @@
                     overlay.classList.add('active');
                     overlay.style.display = 'block';
                     document.body.style.overflow = 'hidden';
-                    console.log('📱 Menu OPENED');
                 } else {
                     newHamburger.classList.remove('active');
                     nav.classList.remove('active');
@@ -315,7 +306,6 @@
                     setTimeout(() => {
                         if (!isMenuOpen) overlay.style.display = 'none';
                     }, 300);
-                    console.log('📱 Menu CLOSED');
                 }
             }
 
@@ -325,7 +315,6 @@
             newHamburger.addEventListener('touchstart', function(e) {
                 if (!isDesktop()) {
                     e.preventDefault();
-                    console.log('👆 Touch detected on hamburger');
                 }
             });
 
@@ -336,8 +325,6 @@
                     if (isMenuOpen && !isDesktop()) toggleMenu();
                 });
             });
-
-            console.log('✅ Ultimate hamburger setup complete!');
 
             // Global test function
             window.testHamburger = toggleMenu;
@@ -352,7 +339,6 @@
             const loading = document.getElementById('loadingScreen');
             if (loading) {
                 loading.remove();
-                console.log('💀 LOADING SCREEN DESTROYED');
                 return true;
             }
             return false;
@@ -375,7 +361,6 @@
                         if (node.nodeType === Node.ELEMENT_NODE) {
                             if (node.id === 'loadingScreen' || node.classList.contains('loading-screen')) {
                                 node.remove();
-                                console.log('💀 LOADING SCREEN KILLED BY OBSERVER');
                             }
                         }
                     });
@@ -656,8 +641,6 @@
 
     <!-- Emergency Loading Fix -->
     <script>
-        console.log('🚨 ULTIMATE LOADING FIX ACTIVATED');
-
         // NUCLEAR OPTION - Force hide immediately and repeatedly
         function forceHideLoading() {
             const loading = document.getElementById('loadingScreen');
@@ -667,7 +650,6 @@
                 loading.style.setProperty('opacity', '0', 'important');
                 loading.style.setProperty('z-index', '-9999', 'important');
                 loading.classList.add('force-hidden');
-                console.log('🚨 NUCLEAR: Loading screen force hidden');
                 return true;
             }
             return false;
@@ -721,12 +703,10 @@
 
             if (success && attempts > 3) {
                 clearInterval(extremeInterval);
-                console.log('🚨 EXTREME: Loading hidden after', attempts, 'attempts');
             }
 
             if (attempts > 100) { // Stop after 10 seconds
                 clearInterval(extremeInterval);
-                console.log('🚨 EXTREME: Stopped after 100 attempts');
             }
         }, 100);
 
@@ -735,14 +715,11 @@
             const loading = document.getElementById('loadingScreen');
             if (loading && loading.style.display !== 'none') {
                 loading.remove();
-                console.log('🚨 LAST RESORT: Loading screen element removed');
             }
     </script>
 
     <!-- Final Simple Fix -->
     <script>
-        console.log('🚀 FINAL SIMPLE FIX');
-
         // Remove any loading screens immediately
         document.querySelectorAll('#loadingScreen, .loading-screen').forEach(el => el.remove());
 
@@ -751,10 +728,10 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
                     .then((registration) => {
-                        console.log('✅ SW registered: ', registration);
+                        // Service worker registered successfully
                     })
                     .catch((registrationError) => {
-                        console.log('❌ SW registration failed: ', registrationError);
+                        // Service worker registration failed
                     });
             });
         }
@@ -772,17 +749,13 @@
                     o.classList.toggle('active');
                     o.style.display = open ? 'block' : 'none';
                     document.body.style.overflow = open ? 'hidden' : '';
-                    console.log('🍔', open ? 'OPEN' : 'CLOSE');
                 };
                 o.onclick = h.onclick;
-                console.log('✅ Simple hamburger ready');
             }
         }, 1000);
 
         // FIX ALL BUTTONS - Navigation and Homepage buttons
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔧 FIXING ALL BUTTONS...');
-
             setTimeout(() => {
                 // Navigation buttons fix
                 const navButtons = {
@@ -801,8 +774,6 @@
 
                 // Navigation function
                 function showSection(targetSection) {
-                    console.log('📍 Showing section:', targetSection);
-
                     // Hide all sections
                     Object.values(sections).forEach(section => {
                         if (section) {
@@ -852,7 +823,6 @@
                             e.preventDefault();
                             e.stopPropagation();
                             showSection(section);
-                            console.log('✅ Nav button clicked:', section);
                         };
 
                         btn.addEventListener('click', clickHandler);
@@ -861,7 +831,6 @@
                             clickHandler(e);
                         });
 
-                        console.log('✅ Nav button setup:', section);
                     }
                 });
 
@@ -880,7 +849,6 @@
                         e.preventDefault();
                         e.stopPropagation();
                         showSection('reader');
-                        console.log('✅ Start reading clicked');
                     });
                     homeButtons.mulai.addEventListener('touchend', (e) => {
                         e.preventDefault();
@@ -892,7 +860,6 @@
                 const downloadPDFHandler = async (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('📥 Starting PDF download...');
 
                     try {
                         // Create download link for the PDF file
@@ -906,12 +873,9 @@
                         link.click();
                         document.body.removeChild(link);
 
-                        console.log('✅ PDF download started');
-
                         // Show success message
                         alert('Download PDF dimulai! File akan tersimpan di folder Download Anda.');
                     } catch (error) {
-                        console.error('❌ PDF download failed:', error);
                         alert('Maaf, terjadi kesalahan saat mendownload PDF. Silakan coba lagi.');
                     }
                 };
@@ -927,7 +891,7 @@
                     homeButtons.downloadMain.addEventListener('touchend', downloadPDFHandler);
                 }
 
-                // Download Aplikasi button - FIXED with proper PWA install
+                // Download Aplikasi button - DIRECT PWA INSTALL
                 if (homeButtons.downloadApp) {
                     homeButtons.downloadApp.onclick = null;
 
@@ -938,46 +902,103 @@
                     window.addEventListener('beforeinstallprompt', (e) => {
                         e.preventDefault();
                         deferredPrompt = e;
-                        console.log('💾 PWA install prompt ready');
                     });
 
                     const installHandler = async (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log('📱 Install app clicked');
 
                         if (deferredPrompt) {
-                            // Show the install prompt
+                            // Show the install prompt directly
                             deferredPrompt.prompt();
 
                             // Wait for the user to respond to the prompt
                             const { outcome } = await deferredPrompt.userChoice;
 
                             if (outcome === 'accepted') {
-                                console.log('✅ User accepted the install prompt');
-                                alert('Aplikasi sedang diinstall! Anda akan melihat ikon Kobebe Komik di home screen.');
+                                // Show success message with download-like UI
+                                const notification = document.createElement('div');
+                                notification.style.cssText = `
+                                    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                                    background: #1a472a; color: white; padding: 20px; border-radius: 10px;
+                                    box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000;
+                                    text-align: center; font-family: Inter, sans-serif;
+                                `;
+                                notification.innerHTML = `
+                                    <div style="font-size: 24px; margin-bottom: 10px;">✅</div>
+                                    <div style="font-weight: 600; margin-bottom: 5px;">Download Berhasil!</div>
+                                    <div style="font-size: 14px;">Aplikasi Kobebe Komik telah diinstall</div>
+                                `;
+                                document.body.appendChild(notification);
+
+                                setTimeout(() => {
+                                    document.body.removeChild(notification);
+                                }, 3000);
                             } else {
-                                console.log('❌ User dismissed the install prompt');
+                                // User canceled - show brief message
                                 alert('Install dibatalkan. Anda tetap bisa menggunakan aplikasi di browser.');
                             }
 
                             deferredPrompt = null;
                         } else {
-                            // Fallback for browsers that don't support PWA install
+                            // For browsers without PWA support or already installed
+                            // Create a download-like experience
+                            const downloadNotification = document.createElement('div');
+                            downloadNotification.style.cssText = `
+                                position: fixed; top: 20px; right: 20px;
+                                background: #1a472a; color: white; padding: 15px; border-radius: 8px;
+                                box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 10000;
+                                font-family: Inter, sans-serif; max-width: 300px;
+                            `;
+
                             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
                             const isAndroid = /Android/.test(navigator.userAgent);
 
-                            let message = 'Untuk menginstall aplikasi:\n\n';
-
                             if (isIOS) {
-                                message += '📱 iOS (Safari):\n1. Tap tombol "Share" (📤)\n2. Pilih "Add to Home Screen"\n3. Tap "Add"';
+                                downloadNotification.innerHTML = `
+                                    <div style="font-weight: 600; margin-bottom: 8px;">📱 Install di iOS</div>
+                                    <div style="font-size: 13px;">
+                                        1. Tap tombol Share (📤)<br>
+                                        2. Pilih "Add to Home Screen"<br>
+                                        3. Tap "Add"
+                                    </div>
+                                `;
                             } else if (isAndroid) {
-                                message += '📱 Android (Chrome):\n1. Tap menu (⋮) di pojok kanan atas\n2. Pilih "Add to Home screen"\n3. Tap "Add"';
+                                downloadNotification.innerHTML = `
+                                    <div style="font-weight: 600; margin-bottom: 8px;">📱 Install di Android</div>
+                                    <div style="font-size: 13px;">
+                                        1. Tap menu (⋮) di browser<br>
+                                        2. Pilih "Add to Home screen"<br>
+                                        3. Tap "Add"
+                                    </div>
+                                `;
                             } else {
-                                message += '🖥️ Desktop:\n1. Klik menu browser (⋮)\n2. Pilih "Install Kobebe Komik" atau "Add to Desktop"\n3. Klik "Install"';
+                                downloadNotification.innerHTML = `
+                                    <div style="font-weight: 600; margin-bottom: 8px;">🖥️ Install di Desktop</div>
+                                    <div style="font-size: 13px;">
+                                        1. Klik menu browser (⋮)<br>
+                                        2. Pilih "Install Kobebe Komik"<br>
+                                        3. Klik "Install"
+                                    </div>
+                                `;
                             }
 
-                            alert(message);
+                            document.body.appendChild(downloadNotification);
+
+                            // Auto hide after 8 seconds
+                            setTimeout(() => {
+                                if (document.body.contains(downloadNotification)) {
+                                    document.body.removeChild(downloadNotification);
+                                }
+                            }, 8000);
+
+                            // Click to dismiss
+                            downloadNotification.style.cursor = 'pointer';
+                            downloadNotification.onclick = () => {
+                                if (document.body.contains(downloadNotification)) {
+                                    document.body.removeChild(downloadNotification);
+                                }
+                            };
                         }
                     };
 
@@ -988,16 +1009,6 @@
                 // Show home section by default
                 showSection('home');
 
-                // Debug: Show which buttons were found
-                console.log('🔍 Button status:');
-                Object.entries(navButtons).forEach(([name, btn]) => {
-                    console.log(`Nav ${name}:`, btn ? '✅ Found' : '❌ Missing');
-                });
-                Object.entries(homeButtons).forEach(([name, btn]) => {
-                    console.log(`Home ${name}:`, btn ? '✅ Found' : '❌ Missing');
-                });
-
-                console.log('✅ ALL BUTTONS FIXED!');
             }, 1500);
         });
 
@@ -1039,7 +1050,6 @@
                             comicContainer.style.transformOrigin = 'top center';
                         }
                     }
-                    console.log('🔍 Zoom updated:', currentZoom + '%');
                 }
 
                 if (zoomInBtn) {
@@ -1048,7 +1058,6 @@
                         const maxZoom = isMobile ? 150 : 200; // Lower max zoom on mobile
                         currentZoom = Math.min(maxZoom, currentZoom + 25);
                         updateZoom();
-                        console.log('🔍 Zoom in:', currentZoom);
                     };
                 }
 
@@ -1056,7 +1065,6 @@
                     zoomOutBtn.onclick = () => {
                         currentZoom = Math.max(50, currentZoom - 25);
                         updateZoom();
-                        console.log('🔍 Zoom out:', currentZoom);
                     };
                 }
 
@@ -1064,7 +1072,6 @@
                     resetZoomBtn.onclick = () => {
                         currentZoom = 100;
                         updateZoom();
-                        console.log('🔍 Reset zoom');
                     };
                 }
 
@@ -1073,7 +1080,6 @@
 
                 // Initialize zoom
                 updateZoom();
-                console.log('✅ Comic reader functionality ready');
             }, 2000);
         });
     </script>
