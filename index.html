@@ -72,6 +72,69 @@
                 padding: 12px !important;
             }
         }
+
+        /* Desktop navbar fix - Force hide hamburger on desktop */
+        @media (min-width: 769px) {
+            /* FORCE HIDE HAMBURGER MENU ON DESKTOP */
+            .hamburger-menu,
+            #hamburgerBtn,
+            .hamburger-menu.active,
+            button.hamburger-menu {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                position: absolute !important;
+                left: -9999px !important;
+                width: 0 !important;
+                height: 0 !important;
+                overflow: hidden !important;
+                pointer-events: none !important;
+            }
+
+            /* FORCE SHOW NAVIGATION ON DESKTOP */
+            .nav,
+            #mainNav {
+                display: flex !important;
+                position: static !important;
+                background: transparent !important;
+                flex-direction: row !important;
+                gap: 1rem !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: none !important;
+                width: auto !important;
+                height: auto !important;
+                box-shadow: none !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+            }
+
+            .nav-btn {
+
+                color: white !important;
+                padding: 0.5rem 1rem !important;
+                border-radius: 6px !important;
+                transition: all 0.3s ease !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 0.5rem !important;
+            }
+
+            .nav-btn:hover,
+            .nav-btn.active {
+                background: rgba(255,255,255,0.2) !important;
+                border-color: rgba(255,255,255,0.4) !important;
+                transform: translateY(-2px) !important;
+            }
+
+            /* Force show header actions on desktop */
+            .header-actions {
+                display: flex !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+        }
     </style>
 
     <script>
@@ -85,6 +148,52 @@
             const hamburger = document.getElementById('hamburgerBtn');
             const nav = document.getElementById('mainNav');
             const overlay = document.getElementById('navOverlay');
+
+            // DESKTOP vs MOBILE detection
+            function isDesktop() {
+                return window.innerWidth > 768;
+            }
+
+            function handleResponsive() {
+                if (isDesktop()) {
+                    // DESKTOP MODE - Hide hamburger, show nav
+                    if (hamburger) {
+                        hamburger.style.display = 'none';
+                        hamburger.style.visibility = 'hidden';
+                        hamburger.style.opacity = '0';
+                    }
+                    if (nav) {
+                        nav.style.display = 'flex';
+                        nav.style.position = 'static';
+                        nav.style.background = 'transparent';
+                        nav.style.flexDirection = 'row';
+                        nav.style.visibility = 'visible';
+                        nav.style.opacity = '1';
+                        nav.style.transform = 'none';
+                        nav.classList.remove('active');
+                    }
+                    if (overlay) {
+                        overlay.style.display = 'none';
+                        overlay.classList.remove('active');
+                    }
+                    document.body.style.overflow = '';
+                    console.log('🖥️ DESKTOP MODE - Hamburger hidden, nav visible');
+                } else {
+                    // MOBILE MODE - Show hamburger, setup mobile nav
+                    if (hamburger) {
+                        hamburger.style.display = 'flex';
+                        hamburger.style.visibility = 'visible';
+                        hamburger.style.opacity = '1';
+                    }
+                    console.log('📱 MOBILE MODE - Hamburger visible');
+                }
+            }
+
+            // Run responsive check
+            handleResponsive();
+
+            // Listen for resize events
+            window.addEventListener('resize', handleResponsive);
 
             if (!hamburger || !nav || !overlay) {
                 setTimeout(ultimateHamburgerFix, 100);
@@ -100,6 +209,12 @@
             let isMenuOpen = false;
 
             function toggleMenu(e) {
+                // Only work on mobile
+                if (isDesktop()) {
+                    console.log('🖥️ Desktop detected - ignoring hamburger click');
+                    return;
+                }
+
                 if (e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -131,15 +246,17 @@
             newHamburger.addEventListener('click', toggleMenu);
             newHamburger.addEventListener('touchend', toggleMenu);
             newHamburger.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                console.log('👆 Touch detected on hamburger');
+                if (!isDesktop()) {
+                    e.preventDefault();
+                    console.log('👆 Touch detected on hamburger');
+                }
             });
 
             // Close menu events
             overlay.addEventListener('click', toggleMenu);
             nav.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    if (isMenuOpen) toggleMenu();
+                    if (isMenuOpen && !isDesktop()) toggleMenu();
                 });
             });
 
@@ -147,9 +264,7 @@
 
             // Global test function
             window.testHamburger = toggleMenu;
-        }
-
-        // Start hamburger fix multiple times to ensure it works
+        }        // Start hamburger fix multiple times to ensure it works
         document.addEventListener('DOMContentLoaded', ultimateHamburgerFix);
         setTimeout(ultimateHamburgerFix, 100);
         setTimeout(ultimateHamburgerFix, 500);
@@ -204,7 +319,7 @@
                 </div>
 
                 <!-- Hamburger Menu Button (Mobile only) -->
-                <button class="hamburger-menu" id="hamburgerBtn">
+                <button class="hamburger-menu" id="hamburgerBtn" aria-label="Toggle navigation menu">
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
@@ -327,6 +442,39 @@
 
                 <div class="comic-scroll-container" id="comicScrollContainer">
                     <!-- All comic pages will be loaded here -->
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 1.jpg" alt="Halaman 1" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 2.jpg" alt="Halaman 2" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 3.jpg" alt="Halaman 3" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 4.jpg" alt="Halaman 4" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 5.jpg" alt="Halaman 5" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 6.jpg" alt="Halaman 6" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 7.jpg" alt="Halaman 7" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 8.jpg" alt="Halaman 8" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 9.jpg" alt="Halaman 9" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 10.jpg" alt="Halaman 10" loading="lazy">
+                    </div>
+                    <div class="comic-page">
+                        <img src="komik/image_komik/page 11.jpg" alt="Halaman 11" loading="lazy">
+                    </div>
                 </div>
 
                 <div class="scroll-indicator">
@@ -412,15 +560,15 @@
     <!-- Image Modal -->
     <div id="imageModal" class="modal">
         <div class="modal-content">
-            <button class="modal-close" id="modalCloseBtn">
+            <button class="modal-close" id="modalCloseBtn" aria-label="Close comic viewer">
                 <i class="fas fa-times"></i>
             </button>
             <img id="modalImage" src="" alt="Gambar Komik">
             <div class="modal-controls">
-                <button class="modal-btn" id="modalPrevBtn">
+                <button class="modal-btn" id="modalPrevBtn" aria-label="Previous comic page">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <button class="modal-btn" id="modalNextBtn">
+                <button class="modal-btn" id="modalNextBtn" aria-label="Next comic page">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
@@ -602,19 +750,32 @@
                     }
                 }
 
-                // Add click events to navigation buttons
+                // Add click events to navigation buttons with better event handling
                 Object.entries(navButtons).forEach(([section, btn]) => {
                     if (btn) {
-                        btn.onclick = (e) => {
+                        // Remove existing listeners
+                        btn.onclick = null;
+                        btn.ontouchend = null;
+
+                        // Add new listeners
+                        const clickHandler = (e) => {
                             e.preventDefault();
+                            e.stopPropagation();
                             showSection(section);
                             console.log('✅ Nav button clicked:', section);
                         };
+
+                        btn.addEventListener('click', clickHandler);
+                        btn.addEventListener('touchend', function(e) {
+                            e.preventDefault();
+                            clickHandler(e);
+                        });
+
                         console.log('✅ Nav button setup:', section);
                     }
                 });
 
-                // Homepage buttons fix
+                // Homepage buttons fix with better event handling
                 const homeButtons = {
                     mulai: document.getElementById('startReadingBtn'),
                     downloadPdf: document.getElementById('downloadPdfBtn'),
@@ -624,37 +785,52 @@
 
                 // Mulai Baca button
                 if (homeButtons.mulai) {
-                    homeButtons.mulai.onclick = (e) => {
+                    homeButtons.mulai.onclick = null;
+                    homeButtons.mulai.addEventListener('click', (e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         showSection('reader');
                         console.log('✅ Start reading clicked');
-                    };
+                    });
+                    homeButtons.mulai.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        showSection('reader');
+                    });
                 }
 
                 // Download PDF buttons
                 const downloadHandler = (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     showSection('download');
                     console.log('✅ Download PDF clicked');
                 };
 
-                if (homeButtons.downloadPdf) homeButtons.downloadPdf.onclick = downloadHandler;
-                if (homeButtons.downloadMain) homeButtons.downloadMain.onclick = downloadHandler;
+                if (homeButtons.downloadPdf) {
+                    homeButtons.downloadPdf.onclick = null;
+                    homeButtons.downloadPdf.addEventListener('click', downloadHandler);
+                    homeButtons.downloadPdf.addEventListener('touchend', downloadHandler);
+                }
+                if (homeButtons.downloadMain) {
+                    homeButtons.downloadMain.onclick = null;
+                    homeButtons.downloadMain.addEventListener('click', downloadHandler);
+                    homeButtons.downloadMain.addEventListener('touchend', downloadHandler);
+                }
 
                 // Download Aplikasi button
                 if (homeButtons.downloadApp) {
-                    homeButtons.downloadApp.onclick = (e) => {
+                    homeButtons.downloadApp.onclick = null;
+                    homeButtons.downloadApp.addEventListener('click', (e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         console.log('✅ Download app clicked');
 
-                        // Try to trigger PWA install
-                        if ('serviceWorker' in navigator) {
-                            // Show install prompt or info
-                            alert('Untuk menginstall aplikasi:\n1. Buka menu browser (⋮)\n2. Pilih "Add to Home screen" atau "Install app"\n3. Ikuti instruksi yang muncul');
-                        } else {
-                            alert('Browser Anda tidak mendukung instalasi PWA. Silakan gunakan browser modern seperti Chrome atau Firefox.');
-                        }
-                    };
+                        alert('Untuk menginstall aplikasi:\n1. Buka menu browser (⋮)\n2. Pilih "Add to Home screen" atau "Install app"\n3. Ikuti instruksi yang muncul');
+                    });
+                    homeButtons.downloadApp.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        homeButtons.downloadApp.click();
+                    });
                 }
 
                 // Show home section by default
@@ -671,6 +847,55 @@
 
                 console.log('✅ ALL BUTTONS FIXED!');
             }, 1500);
+        });
+
+        // COMIC READER FUNCTIONALITY
+        let currentZoom = 100;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const zoomInBtn = document.getElementById('zoomInBtn');
+                const zoomOutBtn = document.getElementById('zoomOutBtn');
+                const resetZoomBtn = document.getElementById('resetZoomBtn');
+                const zoomLevel = document.getElementById('zoomLevel');
+                const comicContainer = document.getElementById('comicScrollContainer');
+
+                function updateZoom() {
+                    if (zoomLevel) zoomLevel.textContent = currentZoom + '%';
+                    if (comicContainer) {
+                        comicContainer.style.transform = `scale(${currentZoom / 100})`;
+                        comicContainer.style.transformOrigin = 'top center';
+                    }
+                }
+
+                if (zoomInBtn) {
+                    zoomInBtn.onclick = () => {
+                        currentZoom = Math.min(200, currentZoom + 25);
+                        updateZoom();
+                        console.log('🔍 Zoom in:', currentZoom);
+                    };
+                }
+
+                if (zoomOutBtn) {
+                    zoomOutBtn.onclick = () => {
+                        currentZoom = Math.max(50, currentZoom - 25);
+                        updateZoom();
+                        console.log('🔍 Zoom out:', currentZoom);
+                    };
+                }
+
+                if (resetZoomBtn) {
+                    resetZoomBtn.onclick = () => {
+                        currentZoom = 100;
+                        updateZoom();
+                        console.log('🔍 Reset zoom');
+                    };
+                }
+
+                // Initialize zoom
+                updateZoom();
+                console.log('✅ Comic reader functionality ready');
+            }, 2000);
         });
     </script>
 
