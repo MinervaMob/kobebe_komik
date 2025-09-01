@@ -43,11 +43,118 @@
             pointer-events: none !important;
             transform: scale(0) !important;
         }
+
+        /* ULTIMATE HAMBURGER MENU FIX FOR MOBILE */
+        .hamburger-menu,
+        #hamburgerBtn {
+            position: relative !important;
+            z-index: 10000 !important;
+            pointer-events: all !important;
+            touch-action: manipulation !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1) !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            min-width: 48px !important;
+            min-height: 48px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        /* Mobile specific fixes */
+        @media (max-width: 768px) {
+            .hamburger-menu,
+            #hamburgerBtn {
+                background: rgba(255,255,255,0.9) !important;
+                border: 2px solid rgba(0,0,0,0.1) !important;
+                border-radius: 8px !important;
+                padding: 12px !important;
+            }
+        }
     </style>
 
     <script>
-        // IMMEDIATE DESTRUCTION OF LOADING SCREEN
-        console.log('🚨 IMMEDIATE LOADING KILLER ACTIVATED');
+        // LOADING SCREEN PERMANENTLY DISABLED
+        console.log('🚨 LOADING SCREEN PERMANENTLY DISABLED');
+
+        // ULTIMATE HAMBURGER MENU FIX
+        console.log('🍔 ULTIMATE HAMBURGER FIX LOADING...');
+
+        function ultimateHamburgerFix() {
+            const hamburger = document.getElementById('hamburgerBtn');
+            const nav = document.getElementById('mainNav');
+            const overlay = document.getElementById('navOverlay');
+
+            if (!hamburger || !nav || !overlay) {
+                setTimeout(ultimateHamburgerFix, 100);
+                return;
+            }
+
+            console.log('🍔 Setting up ultimate hamburger...');
+
+            // Remove all existing listeners
+            const newHamburger = hamburger.cloneNode(true);
+            hamburger.parentNode.replaceChild(newHamburger, hamburger);
+
+            let isMenuOpen = false;
+
+            function toggleMenu(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                console.log('🍔 MENU TOGGLE!');
+                isMenuOpen = !isMenuOpen;
+
+                if (isMenuOpen) {
+                    newHamburger.classList.add('active');
+                    nav.classList.add('active');
+                    overlay.classList.add('active');
+                    overlay.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                    console.log('📱 Menu OPENED');
+                } else {
+                    newHamburger.classList.remove('active');
+                    nav.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                    setTimeout(() => {
+                        if (!isMenuOpen) overlay.style.display = 'none';
+                    }, 300);
+                    console.log('📱 Menu CLOSED');
+                }
+            }
+
+            // Multiple event listeners for maximum compatibility
+            newHamburger.addEventListener('click', toggleMenu);
+            newHamburger.addEventListener('touchend', toggleMenu);
+            newHamburger.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                console.log('👆 Touch detected on hamburger');
+            });
+
+            // Close menu events
+            overlay.addEventListener('click', toggleMenu);
+            nav.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (isMenuOpen) toggleMenu();
+                });
+            });
+
+            console.log('✅ Ultimate hamburger setup complete!');
+
+            // Global test function
+            window.testHamburger = toggleMenu;
+        }
+
+        // Start hamburger fix multiple times to ensure it works
+        document.addEventListener('DOMContentLoaded', ultimateHamburgerFix);
+        setTimeout(ultimateHamburgerFix, 100);
+        setTimeout(ultimateHamburgerFix, 500);
+        setTimeout(ultimateHamburgerFix, 1000);
+        setTimeout(ultimateHamburgerFix, 2000);
 
         function killLoading() {
             const loading = document.getElementById('loadingScreen');
@@ -302,17 +409,6 @@
         </section>
     </main>
 
-    <!-- Loading Screen -->
-    <div id="loadingScreen" class="loading-screen">
-        <div class="loading-content">
-            <i class="fas fa-book-open loading-icon"></i>
-            <h3>Memuat Komik...</h3>
-            <div class="loading-bar">
-                <div class="loading-progress" id="loadingProgress"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- Image Modal -->
     <div id="imageModal" class="modal">
         <div class="modal-content">
@@ -416,8 +512,37 @@
                 loading.remove();
                 console.log('🚨 LAST RESORT: Loading screen element removed');
             }
-        }, 5000);
-    </script>    <!-- Scripts -->
+    </script>
+
+    <!-- Final Simple Fix -->
+    <script>
+        console.log('🚀 FINAL SIMPLE FIX');
+
+        // Remove any loading screens immediately
+        document.querySelectorAll('#loadingScreen, .loading-screen').forEach(el => el.remove());
+
+        // Simple hamburger fix for mobile
+        setTimeout(() => {
+            const h = document.getElementById('hamburgerBtn');
+            const n = document.getElementById('mainNav');
+            const o = document.getElementById('navOverlay');
+
+            if (h && n && o) {
+                h.onclick = h.ontouchend = () => {
+                    const open = n.classList.toggle('active');
+                    h.classList.toggle('active');
+                    o.classList.toggle('active');
+                    o.style.display = open ? 'block' : 'none';
+                    document.body.style.overflow = open ? 'hidden' : '';
+                    console.log('🍔', open ? 'OPEN' : 'CLOSE');
+                };
+                o.onclick = h.onclick;
+                console.log('✅ Simple hamburger ready');
+            }
+        }, 1000);
+    </script>
+
+    <!-- Scripts -->
     <script src="loading-fix.js"></script>
     <script src="script.js"></script>
 </body>
