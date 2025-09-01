@@ -540,6 +540,138 @@
                 console.log('✅ Simple hamburger ready');
             }
         }, 1000);
+
+        // FIX ALL BUTTONS - Navigation and Homepage buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 FIXING ALL BUTTONS...');
+
+            setTimeout(() => {
+                // Navigation buttons fix
+                const navButtons = {
+                    home: document.getElementById('homeBtn'),
+                    reader: document.getElementById('readerBtn'),
+                    download: document.getElementById('downloadBtn'),
+                    about: document.getElementById('aboutBtn')
+                };
+
+                const sections = {
+                    home: document.getElementById('homeSection'),
+                    reader: document.getElementById('readerSection'),
+                    download: document.getElementById('downloadSection'),
+                    about: document.getElementById('aboutSection')
+                };
+
+                // Navigation function
+                function showSection(targetSection) {
+                    console.log('📍 Showing section:', targetSection);
+
+                    // Hide all sections
+                    Object.values(sections).forEach(section => {
+                        if (section) {
+                            section.classList.remove('active');
+                            section.style.display = 'none';
+                        }
+                    });
+
+                    // Remove active from all nav buttons
+                    Object.values(navButtons).forEach(btn => {
+                        if (btn) btn.classList.remove('active');
+                    });
+
+                    // Show target section
+                    if (sections[targetSection]) {
+                        sections[targetSection].classList.add('active');
+                        sections[targetSection].style.display = 'block';
+                    }
+
+                    // Activate nav button
+                    if (navButtons[targetSection]) {
+                        navButtons[targetSection].classList.add('active');
+                    }
+
+                    // Close mobile menu if open
+                    const nav = document.getElementById('mainNav');
+                    const overlay = document.getElementById('navOverlay');
+                    const hamburger = document.getElementById('hamburgerBtn');
+
+                    if (nav && nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        if (overlay) overlay.classList.remove('active');
+                        if (hamburger) hamburger.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                }
+
+                // Add click events to navigation buttons
+                Object.entries(navButtons).forEach(([section, btn]) => {
+                    if (btn) {
+                        btn.onclick = (e) => {
+                            e.preventDefault();
+                            showSection(section);
+                            console.log('✅ Nav button clicked:', section);
+                        };
+                        console.log('✅ Nav button setup:', section);
+                    }
+                });
+
+                // Homepage buttons fix
+                const homeButtons = {
+                    mulai: document.getElementById('startReadingBtn'),
+                    downloadPdf: document.getElementById('downloadPdfBtn'),
+                    downloadMain: document.getElementById('downloadPdfBtnMain'),
+                    downloadApp: document.getElementById('downloadAppBtn')
+                };
+
+                // Mulai Baca button
+                if (homeButtons.mulai) {
+                    homeButtons.mulai.onclick = (e) => {
+                        e.preventDefault();
+                        showSection('reader');
+                        console.log('✅ Start reading clicked');
+                    };
+                }
+
+                // Download PDF buttons
+                const downloadHandler = (e) => {
+                    e.preventDefault();
+                    showSection('download');
+                    console.log('✅ Download PDF clicked');
+                };
+
+                if (homeButtons.downloadPdf) homeButtons.downloadPdf.onclick = downloadHandler;
+                if (homeButtons.downloadMain) homeButtons.downloadMain.onclick = downloadHandler;
+
+                // Download Aplikasi button
+                if (homeButtons.downloadApp) {
+                    homeButtons.downloadApp.onclick = (e) => {
+                        e.preventDefault();
+                        console.log('✅ Download app clicked');
+
+                        // Try to trigger PWA install
+                        if ('serviceWorker' in navigator) {
+                            // Show install prompt or info
+                            alert('Untuk menginstall aplikasi:\n1. Buka menu browser (⋮)\n2. Pilih "Add to Home screen" atau "Install app"\n3. Ikuti instruksi yang muncul');
+                        } else {
+                            alert('Browser Anda tidak mendukung instalasi PWA. Silakan gunakan browser modern seperti Chrome atau Firefox.');
+                        }
+                    };
+                }
+
+                // Show home section by default
+                showSection('home');
+
+                // Debug: Show which buttons were found
+                console.log('🔍 Button status:');
+                Object.entries(navButtons).forEach(([name, btn]) => {
+                    console.log(`Nav ${name}:`, btn ? '✅ Found' : '❌ Missing');
+                });
+                Object.entries(homeButtons).forEach(([name, btn]) => {
+                    console.log(`Home ${name}:`, btn ? '✅ Found' : '❌ Missing');
+                });
+
+                console.log('✅ ALL BUTTONS FIXED!');
+            }, 1500);
+        });
     </script>
 
     <!-- Scripts -->
