@@ -1,3 +1,12 @@
+// IMMEDIATE LOADING SCREEN FIX
+setTimeout(() => {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+        console.log('⚡ IMMEDIATE FIX: Hiding loading screen');
+        loadingScreen.style.display = 'none';
+    }
+}, 3000);
+
 // App State
 let zoomLevel = 100;
 let isDarkTheme = true; // Start with dark theme
@@ -81,6 +90,20 @@ function initializeDOMElements() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM Content Loaded, initializing app...');
 
+    // FORCE HIDE LOADING SCREEN IMMEDIATELY
+    setTimeout(() => {
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            console.log('🚨 FORCE HIDING LOADING SCREEN');
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        } else {
+            console.log('❌ Loading screen element not found');
+        }
+    }, 1000);
+
     try {
         // Initialize DOM elements first
         initializeDOMElements();
@@ -91,48 +114,40 @@ document.addEventListener('DOMContentLoaded', function() {
         setupServiceWorker();
         setupPWAInstallPrompt();
 
-        // Hide loading screen after all images are loaded or timeout
+        // Quick hide for loading screen - don't wait for images
+        setTimeout(() => {
+            console.log('Quick hide loading screen');
+            hideLoadingScreen();
+        }, 2000);
+
+        // Background image loading (non-blocking)
         let imagesLoaded = 0;
         const totalImages = comicPages.length;
-        let loadingTimeout;
 
-        // Check if all images are loaded
-        function checkImagesLoaded() {
-            if (imagesLoaded >= totalImages) {
-                clearTimeout(loadingTimeout);
-                console.log('All images loaded, hiding loading screen');
-                hideLoadingScreen();
-            }
-        }
-
-        // Load images with progress tracking
+        // Load images in background
         comicPages.forEach((imagePath, index) => {
             const img = new Image();
             img.onload = () => {
                 imagesLoaded++;
+                console.log(`Image loaded: ${index + 1}/${totalImages}`);
                 updateLoadingProgress((imagesLoaded / totalImages) * 100);
-                checkImagesLoaded();
             };
             img.onerror = () => {
                 console.warn(`Failed to load image: ${imagePath}`);
                 imagesLoaded++;
-                checkImagesLoaded();
             };
             img.src = imagePath;
         });
 
-        // Fallback timeout - hide loading screen after 3 seconds even if not all images loaded
-        loadingTimeout = setTimeout(() => {
-            console.log('Loading timeout reached, hiding loading screen');
-            hideLoadingScreen();
-        }, 3000);
-
     } catch (error) {
         console.error('Error during app initialization:', error);
-        // Still hide loading screen even if there's an error
+        // Force hide loading screen on error
         setTimeout(() => {
-            hideLoadingScreen();
-        }, 1000);
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+        }, 500);
     }
 });
 
@@ -1702,91 +1717,165 @@ window.addEventListener('resize', debounce(() => {
 
 console.log('Kobebe Komik App initialized successfully!');
 
-// HAMBURGER MENU FIX - Direct approach
-document.addEventListener('DOMContentLoaded', function() {
-    // Wait a bit for all other scripts to load
-    setTimeout(function() {
-        console.log('🔧 DIRECT HAMBURGER FIX STARTING...');
+// ULTIMATE HAMBURGER MENU FIX
+(function() {
+    'use strict';
 
-        const hamburger = document.getElementById('hamburgerBtn');
-        const nav = document.getElementById('mainNav');
-        const overlay = document.getElementById('navOverlay');
+    let isMenuOpen = false;
+
+    function initHamburger() {
+        console.log('🍔 ULTIMATE HAMBURGER INIT...');
+
+        const hamburger = document.querySelector('#hamburgerBtn');
+        const nav = document.querySelector('#mainNav');
+        const overlay = document.querySelector('#navOverlay');
 
         if (!hamburger || !nav || !overlay) {
-            console.log('❌ Elements not found for hamburger fix');
+            console.log('⏰ Elements not ready, retrying in 100ms...');
+            setTimeout(initHamburger, 100);
             return;
         }
 
-        console.log('✅ All elements found, applying direct fix...');
+        console.log('✅ Found all elements, setting up hamburger...');
 
-        // Remove all existing event listeners
-        hamburger.replaceWith(hamburger.cloneNode(true));
-        const newHamburger = document.getElementById('hamburgerBtn');
+        // Ultimate toggle function
+        function ultimateToggle(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
 
-        // Simple toggle function
-        function directToggle() {
-            console.log('🎯 DIRECT HAMBURGER TOGGLE!');
-            const isOpen = nav.classList.contains('active');
+            console.log('🎯 ULTIMATE TOGGLE TRIGGERED!');
 
-            if (isOpen) {
-                newHamburger.classList.remove('active');
+            isMenuOpen = !isMenuOpen;
+
+            if (isMenuOpen) {
+                hamburger.classList.add('active');
+                nav.classList.add('active');
+                overlay.classList.add('active');
+                overlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                console.log('📱 MENU OPENED');
+            } else {
+                hamburger.classList.remove('active');
                 nav.classList.remove('active');
                 overlay.classList.remove('active');
                 document.body.style.overflow = '';
-                console.log('📱 Menu CLOSED');
-            } else {
-                newHamburger.classList.add('active');
-                nav.classList.add('active');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                console.log('📱 Menu OPENED');
+                setTimeout(() => {
+                    if (!isMenuOpen) overlay.style.display = 'none';
+                }, 300);
+                console.log('📱 MENU CLOSED');
             }
         }
 
-        // Add click events
-        newHamburger.onclick = directToggle;
-        newHamburger.ontouchend = function(e) {
+        // Remove all existing listeners by replacing element
+        const newHamburger = hamburger.cloneNode(true);
+        hamburger.parentNode.replaceChild(newHamburger, hamburger);
+
+        // Add multiple event types
+        newHamburger.addEventListener('click', ultimateToggle, { passive: false });
+        newHamburger.addEventListener('touchstart', function(e) {
             e.preventDefault();
-            directToggle();
-        };
+            ultimateToggle(e);
+        }, { passive: false });
+        newHamburger.addEventListener('touchend', function(e) {
+            e.preventDefault();
+        }, { passive: false });
 
-        // Close when clicking overlay
-        overlay.onclick = directToggle;
-
-        // Close when clicking nav buttons
-        nav.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.onclick = function() {
-                if (nav.classList.contains('active')) {
-                    directToggle();
-                }
-            };
+        // Close menu when clicking overlay
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                ultimateToggle(e);
+            }
         });
 
-        // Make globally available for testing
-        window.toggleMenu = directToggle;
+        // Close menu when clicking nav items
+        nav.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (isMenuOpen) {
+                    ultimateToggle();
+                }
+            });
+        });
 
-        console.log('🎉 DIRECT HAMBURGER FIX COMPLETE!');
+        // Escape key closes menu
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isMenuOpen) {
+                ultimateToggle();
+            }
+        });
 
-        // Show success indicator
-        const indicator = document.createElement('div');
-        indicator.style.cssText = `
+        // Make functions globally available for debugging
+        window.forceToggleMenu = ultimateToggle;
+        window.getMenuState = () => isMenuOpen;
+
+        console.log('🎉 ULTIMATE HAMBURGER SETUP COMPLETE!');
+
+        // Visual confirmation
+        const success = document.createElement('div');
+        success.innerHTML = '🍔 Hamburger Ready!';
+        success.style.cssText = `
             position: fixed;
-            top: 60px;
-            right: 10px;
-            background: #4CAF50;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(76, 175, 80, 0.95);
             color: white;
-            padding: 8px;
-            border-radius: 5px;
-            font-size: 12px;
-            z-index: 9999;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            z-index: 10000;
             font-family: Arial, sans-serif;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         `;
-        indicator.textContent = '✅ Hamburger Fixed!';
-        document.body.appendChild(indicator);
+        document.body.appendChild(success);
 
-        setTimeout(() => {
-            indicator.remove();
-        }, 3000);
+        setTimeout(() => success.remove(), 2000);
+    }
 
-    }, 500); // Wait 500ms for other scripts
-});
+    // Start initialization when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHamburger);
+    } else {
+        // DOM already ready
+        setTimeout(initHamburger, 100);
+    }
+
+    })();
+
+// EMERGENCY HAMBURGER BACKUP - Runs every 2 seconds to ensure hamburger works
+setInterval(function() {
+    const hamburger = document.querySelector('#hamburgerBtn');
+    const nav = document.querySelector('#mainNav');
+
+    if (hamburger && nav && !hamburger._emergencyFixed) {
+        hamburger._emergencyFixed = true;
+
+        // Emergency click handler
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🚨 EMERGENCY HAMBURGER CLICKED!');
+
+            const isOpen = nav.classList.contains('active');
+            const overlay = document.querySelector('#navOverlay');
+
+            if (isOpen) {
+                hamburger.classList.remove('active');
+                nav.classList.remove('active');
+                if (overlay) overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                hamburger.classList.add('active');
+                nav.classList.add('active');
+                if (overlay) {
+                    overlay.classList.add('active');
+                    overlay.style.display = 'block';
+                }
+                document.body.style.overflow = 'hidden';
+            }
+        }, { capture: true });
+
+        console.log('🚨 Emergency hamburger handler activated');
+    }
+}, 2000);

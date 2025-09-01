@@ -875,6 +875,10 @@ body {
         -webkit-user-select: none;
         touch-action: manipulation;
         cursor: pointer;
+        /* Ensure button is always clickable */
+        pointer-events: all !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
     }
 
     .hamburger-menu:hover,

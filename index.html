@@ -26,6 +26,65 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- ULTIMATE LOADING SCREEN KILLER -->
+    <style>
+        #loadingScreen,
+        .loading-screen {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            z-index: -99999 !important;
+            position: absolute !important;
+            top: -9999px !important;
+            left: -9999px !important;
+            width: 0 !important;
+            height: 0 !important;
+            pointer-events: none !important;
+            transform: scale(0) !important;
+        }
+    </style>
+
+    <script>
+        // IMMEDIATE DESTRUCTION OF LOADING SCREEN
+        console.log('🚨 IMMEDIATE LOADING KILLER ACTIVATED');
+
+        function killLoading() {
+            const loading = document.getElementById('loadingScreen');
+            if (loading) {
+                loading.remove();
+                console.log('💀 LOADING SCREEN DESTROYED');
+                return true;
+            }
+            return false;
+        }
+
+        // Try to kill it immediately and keep trying
+        killLoading();
+        setTimeout(killLoading, 100);
+        setTimeout(killLoading, 500);
+        setTimeout(killLoading, 1000);
+
+        // Kill on DOM ready
+        document.addEventListener('DOMContentLoaded', killLoading);
+
+        // Observer to kill any loading screen that appears
+        if (typeof MutationObserver !== 'undefined') {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            if (node.id === 'loadingScreen' || node.classList.contains('loading-screen')) {
+                                node.remove();
+                                console.log('💀 LOADING SCREEN KILLED BY OBSERVER');
+                            }
+                        }
+                    });
+                });
+            });
+            observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+        }
+    </script>
 </head>
 <body>
     <!-- Header -->
@@ -274,7 +333,92 @@
 
     <!-- Install Prompt - Removed the unnecessary corner box -->
 
-    <!-- Scripts -->
+    <!-- Emergency Loading Fix -->
+    <script>
+        console.log('🚨 ULTIMATE LOADING FIX ACTIVATED');
+
+        // NUCLEAR OPTION - Force hide immediately and repeatedly
+        function forceHideLoading() {
+            const loading = document.getElementById('loadingScreen');
+            if (loading) {
+                loading.style.setProperty('display', 'none', 'important');
+                loading.style.setProperty('visibility', 'hidden', 'important');
+                loading.style.setProperty('opacity', '0', 'important');
+                loading.style.setProperty('z-index', '-9999', 'important');
+                loading.classList.add('force-hidden');
+                console.log('🚨 NUCLEAR: Loading screen force hidden');
+                return true;
+            }
+            return false;
+        }
+
+        // Add CSS to force hide
+        const forceStyle = document.createElement('style');
+        forceStyle.textContent = `
+            .force-hidden {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                z-index: -9999 !important;
+                pointer-events: none !important;
+            }
+            #loadingScreen.force-hidden {
+                display: none !important;
+            }
+        `;
+        document.head.appendChild(forceStyle);
+
+        // Try to hide immediately
+        forceHideLoading();
+
+        // Try again after DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', forceHideLoading);
+        } else {
+            forceHideLoading();
+        }
+
+        // Try again after everything loads
+        window.addEventListener('load', forceHideLoading);
+
+        // Force hide after 1 second
+        setTimeout(forceHideLoading, 1000);
+
+        // Force hide after 2 seconds
+        setTimeout(forceHideLoading, 2000);
+
+        // Force hide on any interaction
+        document.addEventListener('click', forceHideLoading);
+        document.addEventListener('touchstart', forceHideLoading);
+        document.addEventListener('keydown', forceHideLoading);
+
+        // Extreme measure - keep trying every 100ms for 10 seconds
+        let attempts = 0;
+        const extremeInterval = setInterval(() => {
+            attempts++;
+            const success = forceHideLoading();
+
+            if (success && attempts > 3) {
+                clearInterval(extremeInterval);
+                console.log('🚨 EXTREME: Loading hidden after', attempts, 'attempts');
+            }
+
+            if (attempts > 100) { // Stop after 10 seconds
+                clearInterval(extremeInterval);
+                console.log('🚨 EXTREME: Stopped after 100 attempts');
+            }
+        }, 100);
+
+        // Last resort - remove element entirely after 5 seconds
+        setTimeout(() => {
+            const loading = document.getElementById('loadingScreen');
+            if (loading && loading.style.display !== 'none') {
+                loading.remove();
+                console.log('🚨 LAST RESORT: Loading screen element removed');
+            }
+        }, 5000);
+    </script>    <!-- Scripts -->
+    <script src="loading-fix.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
