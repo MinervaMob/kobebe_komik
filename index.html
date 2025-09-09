@@ -104,22 +104,32 @@
                 width: 100vw !important;
                 max-width: 100vw !important;
                 overflow-x: hidden !important;
+                background: #000 !important;
             }
 
             .comic-scroll-container {
-                width: 100vw !important;
-                max-width: 100vw !important;
-                padding: 0 10px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 10px !important;
                 box-sizing: border-box !important;
                 overflow-x: hidden !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 15px !important;
+                align-items: center !important;
             }
 
             .comic-page {
                 width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 auto 1rem auto !important;
+                max-width: 95% !important;
+                margin: 0 !important;
                 padding: 0 !important;
                 box-sizing: border-box !important;
+                display: flex !important;
+                justify-content: center !important;
+                border-radius: 8px !important;
+                overflow: hidden !important;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.3) !important;
             }
 
             .comic-page img {
@@ -127,26 +137,138 @@
                 max-width: 100% !important;
                 height: auto !important;
                 display: block !important;
-                margin: 0 auto !important;
+                margin: 0 !important;
                 object-fit: contain !important;
+                object-position: center !important;
                 box-sizing: border-box !important;
+                border-radius: 8px !important;
             }
 
             .reader-header {
-                padding: 0.5rem 1rem !important;
+                padding: 10px 15px !important;
                 width: 100% !important;
                 max-width: 100% !important;
                 box-sizing: border-box !important;
+                background: rgba(0,0,0,0.8) !important;
+                color: white !important;
+                position: sticky !important;
+                top: 60px !important;
+                z-index: 100 !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+            }
+
+            .reader-header h2 {
+                font-size: 18px !important;
+                margin: 0 !important;
+                color: white !important;
             }
 
             .reader-tools {
-                gap: 0.5rem !important;
+                gap: 8px !important;
+                display: flex !important;
+                align-items: center !important;
             }
 
             .tool-btn {
                 min-width: 40px !important;
                 min-height: 40px !important;
                 padding: 8px !important;
+                background: rgba(255,255,255,0.2) !important;
+                border: 1px solid rgba(255,255,255,0.3) !important;
+                color: white !important;
+                border-radius: 6px !important;
+                font-size: 14px !important;
+            }
+
+            #zoomLevel {
+                color: white !important;
+                font-size: 14px !important;
+                font-weight: 500 !important;
+                min-width: 45px !important;
+                text-align: center !important;
+            }
+
+            /* Mobile scroll indicator */
+            .scroll-indicator {
+                position: fixed !important;
+                bottom: 20px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 80% !important;
+                height: 4px !important;
+                background: rgba(255,255,255,0.3) !important;
+                border-radius: 2px !important;
+                z-index: 1000 !important;
+            }
+
+            .scroll-progress {
+                height: 100% !important;
+                background: #1a472a !important;
+                border-radius: 2px !important;
+                transition: width 0.3s ease !important;
+            }
+
+            /* Mobile Reader Section Specific */
+            #readerSection {
+                background: #000 !important;
+                min-height: 100vh !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            #readerSection.active {
+                display: block !important;
+            }
+
+            /* Hide header when in reader mode on mobile */
+            #readerSection.active ~ * .header {
+                display: none !important;
+            }
+
+            /* Ensure comic pages are properly displayed */
+            .comic-page:first-child {
+                margin-top: 10px !important;
+            }
+
+            .comic-page:last-child {
+                margin-bottom: 20px !important;
+            }
+
+            /* Fix mobile zoom issues */
+            @media (max-width: 768px) {
+                .comic-scroll-container {
+                    transform-origin: top center !important;
+                    will-change: transform !important;
+                }
+
+                /* Prevent horizontal overflow when zoomed */
+                .comic-scroll-container * {
+                    max-width: 100% !important;
+                    box-sizing: border-box !important;
+                }
+
+                /* Better touch scrolling */
+                .comic-scroll-container {
+                    overflow-scrolling: touch !important;
+                    -webkit-overflow-scrolling: touch !important;
+                    overflow-y: auto !important;
+                    scroll-snap-type: y proximity !important;
+                }
+
+                .comic-page {
+                    scroll-snap-align: start !important;
+                    scroll-margin-top: 20px !important;
+                }
+
+                /* Optimize images for mobile */
+                .comic-page img {
+                    image-rendering: -webkit-optimize-contrast !important;
+                    image-rendering: optimize-contrast !important;
+                    -webkit-backface-visibility: hidden !important;
+                    backface-visibility: hidden !important;
+                }
             }
         }
 
@@ -1026,28 +1148,31 @@
                 function updateZoom() {
                     if (zoomLevel) zoomLevel.textContent = currentZoom + '%';
                     if (comicContainer) {
-                        // Mobile responsive zoom - prevent horizontal scroll
                         const isMobile = window.innerWidth <= 768;
 
                         if (isMobile) {
-                            // On mobile, limit zoom to prevent horizontal scroll
-                            const maxMobileZoom = Math.min(currentZoom, 150);
-                            comicContainer.style.transform = `scale(${maxMobileZoom / 100})`;
-                            comicContainer.style.transformOrigin = 'top center';
-                            comicContainer.style.width = '100%';
-                            comicContainer.style.maxWidth = '100vw';
-                            comicContainer.style.overflow = 'visible';
+                            // Mobile zoom strategy - scale individual images instead of container
+                            const pages = comicContainer.querySelectorAll('.comic-page img');
+                            const zoomScale = Math.min(currentZoom / 100, 1.5); // Max 150% on mobile
 
-                            // Ensure container stays within viewport
-                            const pages = comicContainer.querySelectorAll('.comic-page');
-                            pages.forEach(page => {
-                                page.style.maxWidth = '100%';
-                                page.style.overflow = 'hidden';
+                            pages.forEach(img => {
+                                img.style.transform = `scale(${zoomScale})`;
+                                img.style.transformOrigin = 'center top';
+                                img.style.transition = 'transform 0.3s ease';
                             });
+
+                            // Reset container transform to prevent double scaling
+                            comicContainer.style.transform = 'none';
                         } else {
-                            // Desktop zoom works normally
+                            // Desktop zoom - scale entire container
                             comicContainer.style.transform = `scale(${currentZoom / 100})`;
                             comicContainer.style.transformOrigin = 'top center';
+
+                            // Reset individual image transforms
+                            const pages = comicContainer.querySelectorAll('.comic-page img');
+                            pages.forEach(img => {
+                                img.style.transform = 'none';
+                            });
                         }
                     }
                 }
@@ -1080,6 +1205,49 @@
 
                 // Initialize zoom
                 updateZoom();
+
+                // Add scroll progress functionality
+                function updateScrollProgress() {
+                    const scrollProgress = document.getElementById('scrollProgress');
+                    if (scrollProgress && comicContainer) {
+                        const scrollTop = comicContainer.scrollTop;
+                        const scrollHeight = comicContainer.scrollHeight - comicContainer.clientHeight;
+                        const scrollPercent = (scrollTop / scrollHeight) * 100;
+                        scrollProgress.style.width = scrollPercent + '%';
+                    }
+                }
+
+                // Add scroll listener for progress
+                if (comicContainer) {
+                    comicContainer.addEventListener('scroll', updateScrollProgress);
+                }
+
+                // Mobile touch optimization
+                if (window.innerWidth <= 768) {
+                    // Add smooth scrolling for mobile
+                    if (comicContainer) {
+                        comicContainer.style.scrollBehavior = 'smooth';
+                        comicContainer.style.overflowY = 'auto';
+                        comicContainer.style.overflowX = 'hidden';
+                        comicContainer.style.webkitOverflowScrolling = 'touch';
+                    }
+
+                    // Prevent zoom on double tap for comic images
+                    const comicImages = document.querySelectorAll('.comic-page img');
+                    comicImages.forEach(img => {
+                        img.addEventListener('touchstart', function(e) {
+                            e.preventDefault();
+                        });
+
+                        // Add image loading optimization
+                        img.addEventListener('load', function() {
+                            this.style.opacity = '1';
+                        });
+
+                        img.style.opacity = '0';
+                        img.style.transition = 'opacity 0.3s ease';
+                    });
+                }
             }, 2000);
         });
     </script>
