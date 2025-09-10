@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Test Mobile Comic Reader</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        .reader-header {
+            background: rgba(0,0,0,0.9);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+        .comic-container {
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+        .comic-page {
+            width: 95%;
+            max-width: 100%;
+            text-align: center;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+        }
+        .comic-page img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+        .zoom-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .zoom-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .zoom-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        #zoomLevel {
+            color: white;
+            min-width: 50px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Mobile specific */
+        @media (max-width: 768px) {
+            .comic-container {
+                padding: 10px 5px;
+                gap: 10px;
+            }
+            .comic-page {
+                width: 98%;
+            }
+            .zoom-btn {
+                padding: 10px 15px;
+                font-size: 18px;
+                min-width: 45px;
+                min-height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="reader-header">
+        <h1>Test Mobile Comic Reader</h1>
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="zoomOut">-</button>
+            <span id="zoomLevel">100%</span>
+            <button class="zoom-btn" id="zoomIn">+</button>
+            <button class="zoom-btn" id="resetZoom">Reset</button>
+        </div>
+    </div>
+
+    <div class="comic-container" id="comicContainer">
+        <div class="comic-page">
+            <img src="komik/image_komik/page 1.jpg" alt="Halaman 1">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 2.jpg" alt="Halaman 2">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 3.jpg" alt="Halaman 3">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 4.jpg" alt="Halaman 4">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 5.jpg" alt="Halaman 5">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 6.jpg" alt="Halaman 6">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 7.jpg" alt="Halaman 7">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 8.jpg" alt="Halaman 8">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 9.jpg" alt="Halaman 9">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 10.jpg" alt="Halaman 10">
+        </div>
+        <div class="comic-page">
+            <img src="komik/image_komik/page 11.jpg" alt="Halaman 11">
+        </div>
+    </div>
+
+    <script>
+        let currentZoom = 100;
+
+        function updateZoom() {
+            document.getElementById('zoomLevel').textContent = currentZoom + '%';
+            const container = document.getElementById('comicContainer');
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                // Mobile: zoom individual images
+                const images = container.querySelectorAll('img');
+                images.forEach(img => {
+                    img.style.transform = `scale(${currentZoom / 100})`;
+                    img.style.transformOrigin = 'center top';
+                });
+            } else {
+                // Desktop: zoom container
+                container.style.transform = `scale(${currentZoom / 100})`;
+                container.style.transformOrigin = 'top center';
+            }
+        }
+
+        document.getElementById('zoomIn').onclick = () => {
+            if (currentZoom < 200) {
+                currentZoom += 25;
+                updateZoom();
+            }
+        };
+
+        document.getElementById('zoomOut').onclick = () => {
+            if (currentZoom > 50) {
+                currentZoom -= 25;
+                updateZoom();
+            }
+        };
+
+        document.getElementById('resetZoom').onclick = () => {
+            currentZoom = 100;
+            updateZoom();
+        };
+
+        // Initialize
+        updateZoom();
+
+        // Handle responsive changes
+        window.addEventListener('resize', updateZoom);
+    </script>
+</body>
+</html>
