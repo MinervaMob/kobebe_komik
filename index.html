@@ -390,26 +390,63 @@
                 #comicScrollContainer > div { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 5px !important; }
                 #comicScrollContainer img { width: 100% !important; max-width: 100% !important; height: auto !important; display: block !important; margin: 0 !important; }
 
+                /* Mobile specific */
                 @media (max-width: 768px) {
-                    #comicScrollContainer { padding: 5px 0 !important; }
+                    #readerSection .reader-header { top: 60px !important; }
+                    #comicScrollContainer { padding: 5px 0 !important; margin-top: 10px !important; }
                     #comicScrollContainer > div { padding: 0 2px !important; }
+                }
+
+                /* Desktop specific - Better layout for reading */
+                @media (min-width: 769px) {
+                    #comicScrollContainer {
+                        max-width: 1000px !important;
+                        margin: 20px auto !important;
+                        padding: 20px !important;
+                        gap: 15px !important;
+                    }
+                    #comicScrollContainer > div {
+                        max-width: 900px !important;
+                        margin: 0 auto 15px auto !important;
+                        padding: 0 !important;
+                    }
+                    #comicScrollContainer img {
+                        border-radius: 8px !important;
+                        box-shadow: 0 4px 12px rgba(255,255,255,0.1) !important;
+                        max-height: none !important; /* Allow full height on desktop */
+                    }
+                    #readerSection .reader-header {
+                        top: 80px !important;
+                        padding: 15px !important;
+                    }
+                }
+
+                /* Large desktop - Even better layout */
+                @media (min-width: 1200px) {
+                    #comicScrollContainer {
+                        max-width: 1200px !important;
+                        padding: 30px !important;
+                    }
+                    #comicScrollContainer > div {
+                        max-width: 1000px !important;
+                    }
                 }
             </style>
 
             <div style="background:#000;min-height:100vh;width:100%;margin:0;padding:0;">
                 <!-- Header -->
-                <div style="background:rgba(0,0,0,0.9);padding:15px;position:sticky;top:70px;z-index:100;text-align:center;border-bottom:1px solid #333;">
-                    <h2 style="color:white;margin:0;font-size:18px;padding:10px 0;">Komik Bilangan Bulat</h2>
+                <div style="background:rgba(0,0,0,0.95);padding:12px 15px;position:sticky;top:80px;z-index:100;text-align:center;border-bottom:1px solid #333;backdrop-filter:blur(10px);">
+                    <h2 style="color:white;margin:0;font-size:18px;padding:8px 0;">Komik Bilangan Bulat</h2>
                     <div style="display:flex;justify-content:center;align-items:center;gap:10px;padding:5px;">
-                        <button id="zoomOutBtn" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:10px 15px;border-radius:5px;cursor:pointer;font-size:18px;min-width:45px;min-height:45px;">-</button>
+                        <button id="zoomOutBtn" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:10px 15px;border-radius:5px;cursor:pointer;font-size:18px;min-width:45px;min-height:45px;transition:all 0.3s ease;">-</button>
                         <span id="zoomLevel" style="color:white;min-width:60px;text-align:center;font-weight:bold;">100%</span>
-                        <button id="zoomInBtn" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:10px 15px;border-radius:5px;cursor:pointer;font-size:18px;min-width:45px;min-height:45px;">+</button>
-                        <button id="resetZoomBtn" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 12px;border-radius:5px;cursor:pointer;font-size:14px;">Reset</button>
+                        <button id="zoomInBtn" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:10px 15px;border-radius:5px;cursor:pointer;font-size:18px;min-width:45px;min-height:45px;transition:all 0.3s ease;">+</button>
+                        <button id="resetZoomBtn" style="background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 12px;border-radius:5px;cursor:pointer;font-size:14px;transition:all 0.3s ease;">Reset</button>
                     </div>
                 </div>
 
                 <!-- Comic Container -->
-                <div id="comicScrollContainer" style="width:100%;padding:10px 0;margin:0;display:flex;flex-direction:column;gap:8px;align-items:center;">
+                <div id="comicScrollContainer" style="width:100%;padding:20px 0;margin:15px 0 0 0;display:flex;flex-direction:column;gap:12px;align-items:center;">
                     <div style="width:100%;padding:0 5px;margin:0;"><img src="komik/image_komik/page 1.jpg" alt="Halaman 1" style="width:100%;height:auto;display:block;margin:0;"></div>
                     <div style="width:100%;padding:0 5px;margin:0;"><img src="komik/image_komik/page 2.jpg" alt="Halaman 2" style="width:100%;height:auto;display:block;margin:0;"></div>
                     <div style="width:100%;padding:0 5px;margin:0;"><img src="komik/image_komik/page 3.jpg" alt="Halaman 3" style="width:100%;height:auto;display:block;margin:0;"></div>
